@@ -1,0 +1,28 @@
+{
+    "nodes": [
+    {
+      "name": "compute-0",
+      "mac": ["52:54:00:43:23:d6"],
+      "cpu": "4",
+      "memory": "6144",
+      "disk": "50",
+            "arch": "x86_64",
+              "pm_addr": "172.16.0.1",
+        "pm_type": "ipmi",
+        "pm_user": "admin",
+        "pm_password": "password",
+        "pm_port": "6233"
+                },    {
+      "name": "controller-0",
+      "mac": ["52:54:00:0e:a6:5c"],
+      "cpu": "8",
+      "memory": "32768",
+      "disk": "40",
+            "arch": "x86_64",
+              "pm_addr": "172.16.0.1",
+        "pm_type": "ipmi",
+        "pm_user": "admin",
+        "pm_password": "password",
+        "pm_port": "6232"
+                }    ]
+}

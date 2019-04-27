@@ -4,7 +4,6 @@
 # all of the Neutron networks. The second stack suppresses the
 # creation of Networks and shares the same network spaces.
 resource_registry:
-  OS::TripleO::Network::Storage: OS::Heat::None
-  OS::TripleO::Network::InternalApi: OS::Heat::None
+  OS::TripleO::Network::Storage: OS::Heat::None  
   OS::TripleO::Network::External: OS::Heat::None
   OS::TripleO::Network::Management: OS::Heat::None

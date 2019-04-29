@@ -13,6 +13,9 @@ spec:
     - mountPath: /etc/neutron/original
       name: neutron
       readOnly: true
+    - mountPath: /etc/nova/original
+      name: neutron
+      readOnly: true      
   nodeName: openshift-worker-0
   volumes:
   - name: hosts
@@ -21,3 +24,6 @@ spec:
   - name: neutron
     hostPath:
       path: /home/tripleo-admin/compute_node/neutron/etc/neutron
+  - name: nova
+    hostPath:
+      path: /home/tripleo-admin/compute_node/nova_libvirt/etc/neutron      

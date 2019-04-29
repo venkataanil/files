@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: fake-node
+  labels:
+    app: fake-node
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fake-node
+  template:
+    metadata:
+      labels:
+        app: fake-node
+    spec:
+      containers:
+      - image: 192.168.24.1:8787/fake-node
+        name: fake-node
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /etc/hosts_compute
+          name: hosts
+        - mountPath: /etc/neutron/original
+          name: neutron
+        - mountPath: /etc/nova/original
+          name: nova
+      volumes:
+      - name: hosts
+        hostPath:
+          path: /home/tripleo-admin/compute_node/hosts
+      - name: neutron
+        hostPath:
+          path: /home/tripleo-admin/compute_node/neutron/etc/neutron
+      - name: nova
+        hostPath:
+          path: /home/tripleo-admin/compute_node/nova_libvirt/etc/nova

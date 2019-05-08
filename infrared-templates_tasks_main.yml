@@ -1,0 +1,11 @@
+---
+# tasks file for infrared-templates
+- name: render nic-configs for  compute
+  template:
+    src: compute.yml.j2
+    dest: /home/stack/compute.yml
+- name: render nic-configs for  controllers
+  template:
+    src: controller.yml.j2
+    dest: "/home/stack/controller-{{item.0}}.yml"
+  with_indexed_items: "{{ controller_storage_mgmt_ips }}"

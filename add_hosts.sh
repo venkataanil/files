@@ -22,3 +22,13 @@ for i in $(seq 0 $((controllers-1))); do
 done
 
 sudo sed -i "s/heat-admin/root/g" ~/.ssh/config
+
+echo "[computes]" > ~/inventory
+for i in $(seq 0 $((computes-1))); do
+  echo "cp-$i" >> ~/inventory
+done
+echo "[controllers]" >> ~/inventory
+for i in $(seq 0 $((controllers-1))); do
+  echo "ct-$i" >> ~/inventory
+done
+

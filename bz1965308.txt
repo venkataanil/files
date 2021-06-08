@@ -1,0 +1,804 @@
+(overcloud) [stack@undercloud browbeat]$ neutron net-create n1                                                                                                               
+neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.                                                                                      
+Created a new network:                                                                                                                                                       
++---------------------------+--------------------------------------+                                                                                                         
+| Field                     | Value                                |                                                                                                         
++---------------------------+--------------------------------------+                                                                                                         
+| admin_state_up            | True                                 |                                                                                                         
+| availability_zone_hints   |                                      |                                                                                                         
+| availability_zones        |                                      |                                                                                                         
+| created_at                | 2021-06-08T04:10:49Z                 |                                                                                                         
+| description               |                                      |                                                                                                         
+| dns_domain                |                                      |                                                                                                         
+| id                        | d1f6f381-30fb-4f4c-bbdb-ebae14757632 |                                                                                                         
+| ipv4_address_scope        |                                      |                                                                                                         
+| ipv6_address_scope        |                                      |                                                                                                         
+| is_default                | False                                |                                                                                                         
+| l2_adjacency              | True                                 |                                                                                                         
+| mtu                       | 1442                                 |                                                                                                         
+| name                      | n1                                   |                                                                                                         
+| port_security_enabled     | True                                 |                                                                                                         
+| project_id                | 5bd03caf30e24b929cf98055738dfab4     |                                                                                                         
+| provider:network_type     | geneve                               |                                                                                                         
+| provider:physical_network |                                      |                                                                                                         
+| provider:segmentation_id  | 3                                    |                                                                                                         
+| qos_policy_id             |                                      |                                                                                                         
+| revision_number           | 1                                    |                                                                                                         
+| router:external           | False                                |                                                                                                         
+| shared                    | False                                |                                                                                                         
+| status                    | ACTIVE                               |                                                                                                         
+| subnets                   |                                      |                                                                                                         
+| tags                      |                                      |                                                                                                         
+| tenant_id                 | 5bd03caf30e24b929cf98055738dfab4     |                                                                                                         
+| updated_at                | 2021-06-08T04:10:49Z                 |                                                                                                         
++---------------------------+--------------------------------------+                  
+(overcloud) [stack@undercloud browbeat]$ neutron subnet-create n1 --name subnet1 91.0.0.0/24                                                                                 
+neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.                                                                                      
+Created a new subnet:
++-------------------+--------------------------------------------+
+| Field             | Value                                      |
++-------------------+--------------------------------------------+
+| allocation_pools  | {"start": "91.0.0.2", "end": "91.0.0.254"} |
+| cidr              | 91.0.0.0/24                                |
+| created_at        | 2021-06-08T04:11:13Z                       |
+| description       |                                            |
+| dns_nameservers   |                                            |
+| enable_dhcp       | True                                       |
+| gateway_ip        | 91.0.0.1                                   |
+| host_routes       |                                            |
+| id                | ae4d80e0-89c5-4d18-8474-97e79cd1ca26       |
+| ip_version        | 4                                          |
+| ipv6_address_mode |                                            |
+| ipv6_ra_mode      |                                            |
+| name              | subnet1                                    |
+| network_id        | d1f6f381-30fb-4f4c-bbdb-ebae14757632       |
+| project_id        | 5bd03caf30e24b929cf98055738dfab4           |
+| revision_number   | 0                                          |
+| segment_id        |                                            |
+| service_types     |                                            |
+| subnetpool_id     |                                            |
+| tags              |                                            |
+| tenant_id         | 5bd03caf30e24b929cf98055738dfab4           |
+| updated_at        | 2021-06-08T04:11:13Z                       |
++-------------------+--------------------------------------------+
+(overcloud) [stack@undercloud browbeat]$ neutron subnet-create n1 --name subnet2 92.0.0.0/24
+neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.
+Created a new subnet:
++-------------------+--------------------------------------------+
+| Field             | Value                                      |
++-------------------+--------------------------------------------+
+| allocation_pools  | {"start": "92.0.0.2", "end": "92.0.0.254"} |
+| cidr              | 92.0.0.0/24                                |
+| created_at        | 2021-06-08T04:11:27Z                       |
+| description       |                                            |
+| dns_nameservers   |                                            |
+| enable_dhcp       | True                                       |
+| gateway_ip        | 92.0.0.1                                   |
+| host_routes       |                                            |
+| id                | 45239900-0f4c-48ab-8a4d-d4c517729e80       |
+| ip_version        | 4                                          |
+| ipv6_address_mode |                                            |
+| ipv6_ra_mode      |                                            |
+| name              | subnet2                                    |
+| network_id        | d1f6f381-30fb-4f4c-bbdb-ebae14757632       |
+| project_id        | 5bd03caf30e24b929cf98055738dfab4           |
+| revision_number   | 0                                          |
+| segment_id        |                                            |
+| service_types     |                                            |
+| subnetpool_id     |                                            |
+| tags              |                                            |
+| tenant_id         | 5bd03caf30e24b929cf98055738dfab4           |
+| updated_at        | 2021-06-08T04:11:27Z                       |
++-------------------+--------------------------------------------+
+(overcloud) [stack@undercloud browbeat]$ neutron port-create --fixed-ip subnet_id=ae4d80e0-89c5-4d18-8474-97e79cd1ca26,ip_address=91.0.0.4 d1f6f381-30fb-4f4c-bbdb-ebae14757632
+neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.
+Created a new port:
++-----------------------+--------------------------------------------------------------------------------------------------+
+| Field                 | Value                                                                                            |
++-----------------------+--------------------------------------------------------------------------------------------------+
+| admin_state_up        | True                                                                                             |
+| allowed_address_pairs |                                                                                                  |
+| binding:host_id       |                                                                                                  |
+| binding:profile       | {}                                                                                               |
+| binding:vif_details   | {}                                                                                               |
+| binding:vif_type      | unbound                                                                                          |
+| binding:vnic_type     | normal                                                                                           |
+| created_at            | 2021-06-08T05:00:32Z                                                                             |
+| description           |                                                                                                  |
+| device_id             |                                                                                                  |
+| device_owner          |                                                                                                  |
+| dns_assignment        | {"ip_address": "91.0.0.4", "hostname": "host-91-0-0-4", "fqdn": "host-91-0-0-4.openstacklocal."} |
+| dns_name              |                                                                                                  |
+| extra_dhcp_opts       |                                                                                                  |
+| fixed_ips             | {"subnet_id": "ae4d80e0-89c5-4d18-8474-97e79cd1ca26", "ip_address": "91.0.0.4"}                  |
+| id                    | 216773aa-afbd-44dd-a543-7e82883a8f20                                                             |
+| ip_allocation         | immediate                                                                                        |
+| mac_address           | fa:16:3e:93:7e:46                                                                                |
+| name                  |                                                                                                  |
+| network_id            | d1f6f381-30fb-4f4c-bbdb-ebae14757632                                                             |
+| port_security_enabled | True                                                                                             |
+| project_id            | 5bd03caf30e24b929cf98055738dfab4                                                                 |
+| qos_policy_id         |                                                                                                  |
+| resource_request      |                                                                                                  |
+| revision_number       | 1                                                                                                |
+| security_groups       | 284e8011-b698-46cb-ac6b-f4aaaddd9742                                                             |
+| status                | DOWN                                                                                             |
+| tags                  |                                                                                                  |
+| tenant_id             | 5bd03caf30e24b929cf98055738dfab4                                                                 |
+| updated_at            | 2021-06-08T05:00:32Z                                                                             |
++-----------------------+--------------------------------------------------------------------------------------------------+
+
+(overcloud) [stack@undercloud browbeat]$ neutron port-create --fixed-ip subnet_id=45239900-0f4c-48ab-8a4d-d4c517729e80,ip_address=92.0.0.5 d1f6f381-30fb-4f4c-bbdb-ebae14757632
+neutron CLI is deprecated and will be removed in the future. Use openstack CLI instead.
+Created a new port:
++-----------------------+--------------------------------------------------------------------------------------------------+
+| Field                 | Value                                                                                            |
++-----------------------+--------------------------------------------------------------------------------------------------+
+| admin_state_up        | True                                                                                             |
+| allowed_address_pairs |                                                                                                  |
+| binding:host_id       |                                                                                                  |
+| binding:profile       | {}                                                                                               |
+| binding:vif_details   | {}                                                                                               |
+| binding:vif_type      | unbound                                                                                          |
+| binding:vnic_type     | normal                                                                                           |
+| created_at            | 2021-06-08T04:17:16Z                                                                             |
+| description           |                                                                                                  |
+| device_id             |                                                                                                  |
+| device_owner          |                                                                                                  |
+| dns_assignment        | {"ip_address": "92.0.0.5", "hostname": "host-92-0-0-5", "fqdn": "host-92-0-0-5.openstacklocal."} |
+| dns_name              |                                                                                                  |
+| extra_dhcp_opts       |                                                                                                  |
+| fixed_ips             | {"subnet_id": "45239900-0f4c-48ab-8a4d-d4c517729e80", "ip_address": "92.0.0.5"}                  |
+| id                    | 4e951525-b18d-4b81-add9-64f03291ba19                                                             |
+| ip_allocation         | immediate                                                                                        |
+| mac_address           | fa:16:3e:35:52:c0                                                                                |
+| name                  |                                                                                                  |
+| network_id            | d1f6f381-30fb-4f4c-bbdb-ebae14757632                                                             |
+| port_security_enabled | True                                                                                             |
+| project_id            | 5bd03caf30e24b929cf98055738dfab4                                                                 |
+| qos_policy_id         |                                                                                                  |
+| resource_request      |                                                                                                  |
+| revision_number       | 1                                                                                                |
+| security_groups       | 284e8011-b698-46cb-ac6b-f4aaaddd9742                                                             |
+| status                | DOWN                                                                                             |
+| tags                  |                                                                                                  |
+| tenant_id             | 5bd03caf30e24b929cf98055738dfab4                                                                 |
+| updated_at            | 2021-06-08T04:17:16Z                                                                             |
++-----------------------+--------------------------------------------------------------------------------------------------+
+network_id=`openstack network show n1 -f value -c id`
+
+(overcloud) [stack@undercloud browbeat]$ openstack image list
++--------------------------------------+----------------------------------------+--------+
+| ID                                   | Name                                   | Status |
++--------------------------------------+----------------------------------------+--------+
+| 3beb780b-42ad-40f7-aa62-822f159c876e | centos7                                | active |
+| ad9910b8-3205-4791-9f5d-cb4dc75cdb6c | cirros                                 | active |
+| 2457d08e-69f4-4963-b60f-92726775eb6e | custom-cirros                          | active |
+| 8233e407-1953-45b1-8e2e-bf8828abb41a | octavia-amphora-16.1-20210205.1.x86_64 | active |
++--------------------------------------+----------------------------------------+--------+
+image_id=`openstack image show custom-cirros -f value -c id`
+flavor_id=`openstack flavor show m1.small -f value -c id`
+(overcloud) [stack@undercloud ~]$ openstack server create --flavor $flavor_id --image $image_id --nic port-id=216773aa-afbd-44dd-a543-7e82883a8f20 backend_member1
++-------------------------------------+---------------------------------------------------------------------------------------+
+| Field                               | Value                                                                                 |
++-------------------------------------+---------------------------------------------------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                                                                |
+| OS-EXT-AZ:availability_zone         |                                                                                       |
+| OS-EXT-SRV-ATTR:host                | None                                                                                  |
+| OS-EXT-SRV-ATTR:hostname            | backend-member1                                                                       |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | None                                                                                  |
+| OS-EXT-SRV-ATTR:instance_name       |                                                                                       |
+| OS-EXT-SRV-ATTR:kernel_id           |                                                                                       |
+| OS-EXT-SRV-ATTR:launch_index        | 0                                                                                     |
+| OS-EXT-SRV-ATTR:ramdisk_id          |                                                                                       |
+| OS-EXT-SRV-ATTR:reservation_id      | r-ixx0wqpp                                                                            |
+| OS-EXT-SRV-ATTR:root_device_name    | None                                                                                  |
+| OS-EXT-SRV-ATTR:user_data           | None                                                                                  |
+| OS-EXT-STS:power_state              | NOSTATE                                                                               |
+| OS-EXT-STS:task_state               | scheduling                                                                            |
+| OS-EXT-STS:vm_state                 | building                                                                              |
+| OS-SRV-USG:launched_at              | None                                                                                  |
+| OS-SRV-USG:terminated_at            | None                                                                                  |
+| accessIPv4                          |                                                                                       |
+| accessIPv6                          |                                                                                       |
+| addresses                           |                                                                                       |
+| adminPass                           | ooqLSECikaD3                                                                          |
+| config_drive                        |                                                                                       |
+| created                             | 2021-06-08T05:04:37Z                                                                  |
+| description                         | None                                                                                  |
+| flavor                              | disk='20', ephemeral='0', , original_name='m1.small', ram='2048', swap='0', vcpus='1' |
+| hostId                              |                                                                                       |
+| host_status                         |                                                                                       |
+| id                                  | a31e9f5e-9e93-42f2-8ad6-1b7748f41574                                                  |
+| image                               | custom-cirros (2457d08e-69f4-4963-b60f-92726775eb6e)                                  |
+| key_name                            | None                                                                                  |
+| locked                              | False                                                                                 |
+| locked_reason                       | None                                                                                  |
+| name                                | backend_member1                                                                       |
+| progress                            | 0                                                                                     |
+| project_id                          | 5bd03caf30e24b929cf98055738dfab4                                                      |
+| properties                          |                                                                                       |
+| security_groups                     | name='default'                                                                        |
+| server_groups                       | []                                                                                    |
+| status                              | BUILD                                                                                 |
+| tags                                | []                                                                                    |
+| trusted_image_certificates          | None                                                                                  |
+| updated                             | 2021-06-08T05:04:37Z                                                                  |
+| user_id                             | 87a00fc9effd4014ad9d54758ac6bd7f                                                      |
+| volumes_attached                    |                                                                                       |
++-------------------------------------+---------------------------------------------------------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack server create --flavor $flavor_id --image $image_id --nic port-id=4e951525-b18d-4b81-add9-64f03291ba19 backend_member
++-------------------------------------+---------------------------------------------------------------------------------------+
+| Field                               | Value                                                                                 |
++-------------------------------------+---------------------------------------------------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                                                                |
+| OS-EXT-AZ:availability_zone         |                                                                                       |
+| OS-EXT-SRV-ATTR:host                | None                                                                                  |
+| OS-EXT-SRV-ATTR:hostname            | backend-member                                                                        |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | None                                                                                  |
+| OS-EXT-SRV-ATTR:instance_name       |                                                                                       |
+| OS-EXT-SRV-ATTR:kernel_id           |                                                                                       |
+| OS-EXT-SRV-ATTR:launch_index        | 0                                                                                     |
+| OS-EXT-SRV-ATTR:ramdisk_id          |                                                                                       |
+| OS-EXT-SRV-ATTR:reservation_id      | r-28plwhix                                                                            |
+| OS-EXT-SRV-ATTR:root_device_name    | None                                                                                  |
+| OS-EXT-SRV-ATTR:user_data           | None                                                                                  |
+| OS-EXT-STS:power_state              | NOSTATE                                                                               |
+| OS-EXT-STS:task_state               | scheduling                                                                            |
+| OS-EXT-STS:vm_state                 | building                                                                              |
+| OS-SRV-USG:launched_at              | None                                                                                  |
+| OS-SRV-USG:terminated_at            | None                                                                                  |
+| accessIPv4                          |                                                                                       |
+| accessIPv6                          |                                                                                       |
+| addresses                           |                                                                                       |
+| adminPass                           | jfLuxS3cK5Ub                                                                          |
+| config_drive                        |                                                                                       |
+| created                             | 2021-06-08T04:26:12Z                                                                  |
+| description                         | None                                                                                  |
+| flavor                              | disk='20', ephemeral='0', , original_name='m1.small', ram='2048', swap='0', vcpus='1' |
+| hostId                              |                                                                                       |
+| host_status                         |                                                                                       |
+| id                                  | bc4b2cea-5b05-4150-ae56-9424788045d5                                                  |
+| image                               | custom-cirros (2457d08e-69f4-4963-b60f-92726775eb6e)                                  |
+| key_name                            | None                                                                                  |
+| locked                              | False                                                                                 |
+| locked_reason                       | None                                                                                  |
+| name                                | backend_member                                                                        |
+| progress                            | 0                                                                                     |
+| project_id                          | 5bd03caf30e24b929cf98055738dfab4                                                      |
+| properties                          |                                                                                       |
+| security_groups                     | name='default'                                                                        |
+| server_groups                       | []                                                                                    |
+| status                              | BUILD                                                                                 |
+| tags                                | []                                                                                    |
+| trusted_image_certificates          | None                                                                                  |
+| updated                             | 2021-06-08T04:26:12Z                                                                  |
+| user_id                             | 87a00fc9effd4014ad9d54758ac6bd7f                                                      |
+| volumes_attached                    |                                                                                       |
++-------------------------------------+---------------------------------------------------------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack server list --all --long
++--------------------------------------+----------------------------------------------+--------+------------+-------------+---------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+------------+
+| ID                                   | Name                                         | Status | Task State | Power State | Networks                                    | Image Name                             | Image ID                             | Flavor Name | Flavor ID | Availability Zone | Host                         | Properties |
++--------------------------------------+----------------------------------------------+--------+------------+-------------+---------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+------------+
+| a31e9f5e-9e93-42f2-8ad6-1b7748f41574 | backend_member1                              | ACTIVE | None       | Running     | n1=91.0.0.4                                 | custom-cirros                          | 2457d08e-69f4-4963-b60f-92726775eb6e |             |           | nova              | computer630-3.redhat.local   |            |
+| 1198a3f3-9715-4f92-b86e-d24851a5d6f2 | amphora-4431b9fa-467f-47af-9c24-9868ea1f69a5 | ACTIVE | None       | Running     | lb-mgmt-net=172.24.0.86; private=10.0.3.225 | octavia-amphora-16.1-20210205.1.x86_64 | 8233e407-1953-45b1-8e2e-bf8828abb41a |             |           | nova              | computer630-18.redhat.local  |            |
+| bc4b2cea-5b05-4150-ae56-9424788045d5 | backend_member                               | ACTIVE | None       | Running     | n1=92.0.0.5                                 | custom-cirros                          | 2457d08e-69f4-4963-b60f-92726775eb6e |             |           | nova              | computer630-3.redhat.local   |            |
+| 0f19f342-089a-41b8-b835-af9084472f04 | arp-server                                   | ACTIVE | None       | Running     | lb-mgmt-net=172.24.0.1                      | cirros                                 | ad9910b8-3205-4791-9f5d-cb4dc75cdb6c |             |           | nova              | computer630-21.redhat.local  |            |
+| 4edd133a-4eb8-483c-bfc2-c79ce93b2375 | jumphost                                     | ACTIVE | None       | Running     | private=10.0.0.132, 172.18.4.191            | cirros                                 | ad9910b8-3205-4791-9f5d-cb4dc75cdb6c |             |           | nova              | compute1029p-11.redhat.local |            |
++--------------------------------------+----------------------------------------------+--------+------------+-------------+---------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+------------+
+
+
+
+(overcloud) [stack@undercloud ~]$ openstack network list
++--------------------------------------+-------------+----------------------------------------------------------------------------+
+| ID                                   | Name        | Subnets                                                                    |
++--------------------------------------+-------------+----------------------------------------------------------------------------+
+| 4e9b4fe3-6995-40f6-9acd-9fcbbf0dd34a | public      | f25d5ce2-71b8-4fb3-9363-ea425c74e552                                       |
+| c314910a-ddf7-4b55-a7be-ae84c8138722 | private     | 7f9148f0-139f-4f2d-9c53-f40f83c28acf                                       |
+| d1f6f381-30fb-4f4c-bbdb-ebae14757632 | n1          | 45239900-0f4c-48ab-8a4d-d4c517729e80, ae4d80e0-89c5-4d18-8474-97e79cd1ca26 |
+| fd6cf905-de8d-496b-a4e2-4c97ed9456e6 | lb-mgmt-net | 8172eba3-6fad-499e-871a-01f88d06e346                                       |
++--------------------------------------+-------------+----------------------------------------------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer create --vip-network-id c314910a-ddf7-4b55-a7be-ae84c8138722 --name lb-bz
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T04:53:23                  |
+| description         |                                      |
+| flavor_id           | None                                 |
+| id                  | 309fde95-fe84-42ba-9181-b50cea881620 |
+| listeners           |                                      |
+| name                | lb-bz                                |
+| operating_status    | OFFLINE                              |
+| pools               |                                      |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| provider            | amphora                              |
+| provisioning_status | PENDING_CREATE                       |
+| updated_at          | None                                 |
+| vip_address         | 10.0.2.226                           |
+| vip_network_id      | c314910a-ddf7-4b55-a7be-ae84c8138722 |
+| vip_port_id         | d41517eb-2089-4591-9b2b-1ca90eec293a |
+| vip_qos_policy_id   | None                                 |
+| vip_subnet_id       | 7f9148f0-139f-4f2d-9c53-f40f83c28acf |
++---------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer create --vip-network-id c314910a-ddf7-4b55-a7be-ae84c8138722 --name lb-bz1
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T05:08:00                  |
+| description         |                                      |
+| flavor_id           | None                                 |
+| id                  | 9ea4ed8b-589d-4436-8892-fc0810a36d7a |
+| listeners           |                                      |
+| name                | lb-bz1                               |
+| operating_status    | OFFLINE                              |
+| pools               |                                      |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| provider            | amphora                              |
+| provisioning_status | PENDING_CREATE                       |
+| updated_at          | None                                 |
+| vip_address         | 10.0.0.183                           |
+| vip_network_id      | c314910a-ddf7-4b55-a7be-ae84c8138722 |
+| vip_port_id         | 3d9ca682-09a5-4ba3-8571-56b3805d1235 |
+| vip_qos_policy_id   | None                                 |
+| vip_subnet_id       | 7f9148f0-139f-4f2d-9c53-f40f83c28acf |
++---------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer list
++--------------------------------------+--------+----------------------------------+-------------+---------------------+----------+
+| id                                   | name   | project_id                       | vip_address | provisioning_status | provider |
++--------------------------------------+--------+----------------------------------+-------------+---------------------+----------+
+| 309fde95-fe84-42ba-9181-b50cea881620 | lb-bz  | 5bd03caf30e24b929cf98055738dfab4 | 10.0.2.226  | ACTIVE              | amphora  |
+| 9ea4ed8b-589d-4436-8892-fc0810a36d7a | lb-bz1 | 5bd03caf30e24b929cf98055738dfab4 | 10.0.0.183  | ACTIVE              | amphora  |
++--------------------------------------+--------+----------------------------------+-------------+---------------------+----------+
+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer listener create --name bzlistener1 --protocol HTTP --protocol-port 80 lb-bz
++-----------------------------+--------------------------------------+
+| Field                       | Value                                |
++-----------------------------+--------------------------------------+
+| admin_state_up              | True                                 |
+| connection_limit            | -1                                   |
+| created_at                  | 2021-06-08T04:55:58                  |
+| default_pool_id             | None                                 |
+| default_tls_container_ref   | None                                 |
+| description                 |                                      |
+| id                          | 226006a9-56e2-47ca-980b-ce7e0d78d2ea |
+| insert_headers              | None                                 |
+| l7policies                  |                                      |
+| loadbalancers               | 309fde95-fe84-42ba-9181-b50cea881620 |
+| name                        | bzlistener1                          |
+| operating_status            | OFFLINE                              |
+| project_id                  | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol                    | HTTP                                 |
+| protocol_port               | 80                                   |
+| provisioning_status         | PENDING_CREATE                       |
+| sni_container_refs          | []                                   |
+| timeout_client_data         | 50000                                |
+| timeout_member_connect      | 5000                                 |
+| timeout_member_data         | 50000                                |
+| timeout_tcp_inspect         | 0                                    |
+| updated_at                  | None                                 |
+| client_ca_tls_container_ref | None                                 |
+| client_authentication       | NONE                                 |
+| client_crl_container_ref    | None                                 |
+| allowed_cidrs               | None                                 |
++-----------------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer listener show bzlistener1
++-----------------------------+--------------------------------------+
+| Field                       | Value                                |
++-----------------------------+--------------------------------------+
+| admin_state_up              | True                                 |
+| connection_limit            | -1                                   |
+| created_at                  | 2021-06-08T04:55:58                  |
+| default_pool_id             | None                                 |
+| default_tls_container_ref   | None                                 |
+| description                 |                                      |
+| id                          | 226006a9-56e2-47ca-980b-ce7e0d78d2ea |
+| insert_headers              | None                                 |
+| l7policies                  |                                      |
+| loadbalancers               | 309fde95-fe84-42ba-9181-b50cea881620 |
+| name                        | bzlistener1                          |
+| operating_status            | ONLINE                               |
+| project_id                  | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol                    | HTTP                                 |
+| protocol_port               | 80                                   |
+| provisioning_status         | ACTIVE                               |
+| sni_container_refs          | []                                   |
+| timeout_client_data         | 50000                                |
+| timeout_member_connect      | 5000                                 |
+| timeout_member_data         | 50000                                |
+| timeout_tcp_inspect         | 0                                    |
+| updated_at                  | 2021-06-08T04:56:02                  |
+| client_ca_tls_container_ref | None                                 |
+| client_authentication       | NONE                                 |
+| client_crl_container_ref    | None                                 |
+| allowed_cidrs               | None                                 |
++-----------------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer listener create --name bz1listener2 --protocol HTTP --protocol-port 80 lb-bz1
++-----------------------------+--------------------------------------+
+| Field                       | Value                                |
++-----------------------------+--------------------------------------+
+| admin_state_up              | True                                 |
+| connection_limit            | -1                                   |
+| created_at                  | 2021-06-08T05:10:15                  |
+| default_pool_id             | None                                 |
+| default_tls_container_ref   | None                                 |
+| description                 |                                      |
+| id                          | 9a5693d1-df6e-4518-b983-591126e3c819 |
+| insert_headers              | None                                 |
+| l7policies                  |                                      |
+| loadbalancers               | 9ea4ed8b-589d-4436-8892-fc0810a36d7a |
+| name                        | bz1listener2                         |
+| operating_status            | OFFLINE                              |
+| project_id                  | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol                    | HTTP                                 |
+| protocol_port               | 80                                   |
+| provisioning_status         | PENDING_CREATE                       |
+| sni_container_refs          | []                                   |
+| timeout_client_data         | 50000                                |
+| timeout_member_connect      | 5000                                 |
+| timeout_member_data         | 50000                                |
+| timeout_tcp_inspect         | 0                                    |
+| updated_at                  | None                                 |
+| client_ca_tls_container_ref | None                                 |
+| client_authentication       | NONE                                 |
+| client_crl_container_ref    | None                                 |
+| allowed_cidrs               | None                                 |
++-----------------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer listener show bz1listener2
++-----------------------------+--------------------------------------+
+| Field                       | Value                                |
++-----------------------------+--------------------------------------+
+| admin_state_up              | True                                 |
+| connection_limit            | -1                                   |
+| created_at                  | 2021-06-08T05:10:15                  |
+| default_pool_id             | None                                 |
+| default_tls_container_ref   | None                                 |
+| description                 |                                      |
+| id                          | 9a5693d1-df6e-4518-b983-591126e3c819 |
+| insert_headers              | None                                 |
+| l7policies                  |                                      |
+| loadbalancers               | 9ea4ed8b-589d-4436-8892-fc0810a36d7a |
+| name                        | bz1listener2                         |
+| operating_status            | ONLINE                               |
+| project_id                  | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol                    | HTTP                                 |
+| protocol_port               | 80                                   |
+| provisioning_status         | ACTIVE                               |
+| sni_container_refs          | []                                   |
+| timeout_client_data         | 50000                                |
+| timeout_member_connect      | 5000                                 |
+| timeout_member_data         | 50000                                |
+| timeout_tcp_inspect         | 0                                    |
+| updated_at                  | 2021-06-08T05:10:21                  |
+| client_ca_tls_container_ref | None                                 |
+| client_authentication       | NONE                                 |
+| client_crl_container_ref    | None                                 |
+| allowed_cidrs               | None                                 |
++-----------------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer pool create --name bzpool1 --lb-algorithm ROUND_ROBIN --listener bzlistener1 --protocol HTTP
++----------------------+--------------------------------------+
+| Field                | Value                                |
++----------------------+--------------------------------------+
+| admin_state_up       | True                                 |
+| created_at           | 2021-06-08T05:11:37                  |
+| description          |                                      |
+| healthmonitor_id     |                                      |
+| id                   | 6bb015a4-b6e8-47f4-997b-2f2104207197 |
+| lb_algorithm         | ROUND_ROBIN                          |
+| listeners            | 226006a9-56e2-47ca-980b-ce7e0d78d2ea |
+| loadbalancers        | 309fde95-fe84-42ba-9181-b50cea881620 |
+| members              |                                      |
+| name                 | bzpool1                              |
+| operating_status     | OFFLINE                              |
+| project_id           | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol             | HTTP                                 |
+| provisioning_status  | PENDING_CREATE                       |
+| session_persistence  | None                                 |
+| updated_at           | None                                 |
+| tls_container_ref    | None                                 |
+| ca_tls_container_ref | None                                 |
+| crl_container_ref    | None                                 |
+| tls_enabled          | False                                |
++----------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer pool create --name bz1pool2 --lb-algorithm ROUND_ROBIN --listener bz1listener2 --protocol HTTP
++----------------------+--------------------------------------+
+| Field                | Value                                |
++----------------------+--------------------------------------+
+| admin_state_up       | True                                 |
+| created_at           | 2021-06-08T05:12:34                  |
+| description          |                                      |
+| healthmonitor_id     |                                      |
+| id                   | 14a1a625-1f47-4975-b752-d6e85392c6a2 |
+| lb_algorithm         | ROUND_ROBIN                          |
+| listeners            | 9a5693d1-df6e-4518-b983-591126e3c819 |
+| loadbalancers        | 9ea4ed8b-589d-4436-8892-fc0810a36d7a |
+| members              |                                      |
+| name                 | bz1pool2                             |
+| operating_status     | OFFLINE                              |
+| project_id           | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol             | HTTP                                 |
+| provisioning_status  | PENDING_CREATE                       |
+| session_persistence  | None                                 |
+| updated_at           | None                                 |
+| tls_container_ref    | None                                 |
+| ca_tls_container_ref | None                                 |
+| crl_container_ref    | None                                 |
+| tls_enabled          | False                                |
++----------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer pool show bzpool1
++----------------------+--------------------------------------+
+| Field                | Value                                |
++----------------------+--------------------------------------+
+| admin_state_up       | True                                 |
+| created_at           | 2021-06-08T05:11:37                  |
+| description          |                                      |
+| healthmonitor_id     |                                      |
+| id                   | 6bb015a4-b6e8-47f4-997b-2f2104207197 |
+| lb_algorithm         | ROUND_ROBIN                          |
+| listeners            | 226006a9-56e2-47ca-980b-ce7e0d78d2ea |
+| loadbalancers        | 309fde95-fe84-42ba-9181-b50cea881620 |
+| members              |                                      |
+| name                 | bzpool1                              |
+| operating_status     | ONLINE                               |
+| project_id           | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol             | HTTP                                 |
+| provisioning_status  | ACTIVE                               |
+| session_persistence  | None                                 |
+| updated_at           | 2021-06-08T05:11:43                  |
+| tls_container_ref    | None                                 |
+| ca_tls_container_ref | None                                 |
+| crl_container_ref    | None                                 |
+| tls_enabled          | False                                |
++----------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer pool show bz1pool2
++----------------------+--------------------------------------+
+| Field                | Value                                |
++----------------------+--------------------------------------+
+| admin_state_up       | True                                 |
+| created_at           | 2021-06-08T05:12:34                  |
+| description          |                                      |
+| healthmonitor_id     |                                      |
+| id                   | 14a1a625-1f47-4975-b752-d6e85392c6a2 |
+| lb_algorithm         | ROUND_ROBIN                          |
+| listeners            | 9a5693d1-df6e-4518-b983-591126e3c819 |
+| loadbalancers        | 9ea4ed8b-589d-4436-8892-fc0810a36d7a |
+| members              |                                      |
+| name                 | bz1pool2                             |
+| operating_status     | ONLINE                               |
+| project_id           | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol             | HTTP                                 |
+| provisioning_status  | ACTIVE                               |
+| session_persistence  | None                                 |
+| updated_at           | 2021-06-08T05:12:41                  |
+| tls_container_ref    | None                                 |
+| ca_tls_container_ref | None                                 |
+| crl_container_ref    | None                                 |
+| tls_enabled          | False                                |
++----------------------+--------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer member create --subnet-id ae4d80e0-89c5-4d18-8474-97e79cd1ca26 --address 91.0.0.4 --protocol-port 80 bzpool1
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| address             | 91.0.0.4                             |
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T05:15:27                  |
+| id                  | 0f4331f0-7e73-43c6-b200-b9803420e1dc |
+| name                |                                      |
+| operating_status    | NO_MONITOR                           |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol_port       | 80                                   |
+| provisioning_status | PENDING_CREATE                       |
+| subnet_id           | ae4d80e0-89c5-4d18-8474-97e79cd1ca26 |
+| updated_at          | None                                 |
+| weight              | 1                                    |
+| monitor_port        | None                                 |
+| monitor_address     | None                                 |
+| backup              | False                                |
++---------------------+--------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer member show  bzpool1 0f4331f0-7e73-43c6-b200-b9803420e1dc
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| address             | 91.0.0.4                             |
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T05:15:27                  |
+| id                  | 0f4331f0-7e73-43c6-b200-b9803420e1dc |
+| name                |                                      |
+| operating_status    | NO_MONITOR                           |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol_port       | 80                                   |
+| provisioning_status | ACTIVE                               |
+| subnet_id           | ae4d80e0-89c5-4d18-8474-97e79cd1ca26 |
+| updated_at          | 2021-06-08T05:15:40                  |
+| weight              | 1                                    |
+| monitor_port        | None                                 |
+| monitor_address     | None                                 |
+| backup              | False                                |
++---------------------+--------------------------------------+
+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer member create --subnet-id 45239900-0f4c-48ab-8a4d-d4c517729e80 --address 92.0.0.5 --protocol-port 80 bz1pool2
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| address             | 92.0.0.5                             |
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T05:18:59                  |
+| id                  | 6d40e481-2270-4cf1-b138-a2faee6baede |
+| name                |                                      |
+| operating_status    | NO_MONITOR                           |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol_port       | 80                                   |
+| provisioning_status | PENDING_CREATE                       |
+| subnet_id           | 45239900-0f4c-48ab-8a4d-d4c517729e80 |
+| updated_at          | None                                 |
+| weight              | 1                                    |
+| monitor_port        | None                                 |
+| monitor_address     | None                                 |
+| backup              | False                                |
++---------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack loadbalancer member show  bz1pool2 6d40e481-2270-4cf1-b138-a2faee6baede
++---------------------+--------------------------------------+
+| Field               | Value                                |
++---------------------+--------------------------------------+
+| address             | 92.0.0.5                             |
+| admin_state_up      | True                                 |
+| created_at          | 2021-06-08T05:18:59                  |
+| id                  | 6d40e481-2270-4cf1-b138-a2faee6baede |
+| name                |                                      |
+| operating_status    | NO_MONITOR                           |
+| project_id          | 5bd03caf30e24b929cf98055738dfab4     |
+| protocol_port       | 80                                   |
+| provisioning_status | ACTIVE                               |
+| subnet_id           | 45239900-0f4c-48ab-8a4d-d4c517729e80 |
+| updated_at          | 2021-06-08T05:19:13                  |
+| weight              | 1                                    |
+| monitor_port        | None                                 |
+| monitor_address     | None                                 |
+| backup              | False                                |
++---------------------+--------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack server list --all --long
++--------------------------------------+----------------------------------------------+--------+------------+-------------+------------------------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+------------+
+| ID                                   | Name                                         | Status | Task State | Power State | Networks                                                   | Image Name                             | Image ID                             | Flavor Name | Flavor ID | Availability Zone | Host                         | Properties |
++--------------------------------------+----------------------------------------------+--------+------------+-------------+------------------------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+------------+
+| 15a33f7b-454c-4b8c-b88b-51223627dd8b | amphora-5a75bceb-3343-4bd5-9629-228930c3244a | ACTIVE | None       | Running     | lb-mgmt-net=172.24.3.100; n1=92.0.0.62; private=10.0.0.43  | octavia-amphora-16.1-20210205.1.x86_64 | 8233e407-1953-45b1-8e2e-bf8828abb41a |             |           | nova              | compute1029p-10.redhat.local |            |
+| a31e9f5e-9e93-42f2-8ad6-1b7748f41574 | backend_member1                              | ACTIVE | None       | Running     | n1=91.0.0.4                                                | custom-cirros                          | 2457d08e-69f4-4963-b60f-92726775eb6e |             |           | nova              | computer630-3.redhat.local   |            |
+| 1198a3f3-9715-4f92-b86e-d24851a5d6f2 | amphora-4431b9fa-467f-47af-9c24-9868ea1f69a5 | ACTIVE | None       | Running     | lb-mgmt-net=172.24.0.86; n1=92.0.0.161; private=10.0.3.225 | octavia-amphora-16.1-20210205.1.x86_64 | 8233e407-1953-45b1-8e2e-bf8828abb41a |             |           | nova              | computer630-18.redhat.local  |            |
+| bc4b2cea-5b05-4150-ae56-9424788045d5 | backend_member                               | ACTIVE | None       | Running     | n1=92.0.0.5                                                | custom-cirros                          | 2457d08e-69f4-4963-b60f-92726775eb6e |             |           | nova              | computer630-3.redhat.local   |            |
+| 0f19f342-089a-41b8-b835-af9084472f04 | arp-server                                   | ACTIVE | None       | Running     | lb-mgmt-net=172.24.0.1                                     | cirros                                 | ad9910b8-3205-4791-9f5d-cb4dc75cdb6c |             |           | nova              | computer630-21.redhat.local  |            |
+| 4edd133a-4eb8-483c-bfc2-c79ce93b2375 | jumphost                                     | ACTIVE | None       | Running     | private=10.0.0.132, 172.18.4.191                           | cirros                                 | ad9910b8-3205-4791-9f5d-cb4dc75cdb6c |             |           | nova              | compute1029p-11.redhat.local |            |
++--------------------------------------+----------------------------------------------+--------+------------+-------------+------------------------------------------------------------+----------------------------------------+--------------------------------------+-------------+-----------+-------------------+------------------------------+----
+[root@controller-0 ~]# ssh -i anil/id_rsa cloud-user@172.24.3.100 "sudo ip netns exec amphora-haproxy  ip a"
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1442 qdisc fq_codel state UP group default qlen 1000
+    link/ether fa:16:3e:3b:8a:92 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.43/16 brd 10.0.255.255 scope global eth1
+       valid_lft forever preferred_lft forever
+    inet 10.0.0.183/16 brd 10.0.255.255 scope global secondary eth1:0
+       valid_lft forever preferred_lft forever
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1442 qdisc fq_codel state UP group default qlen 1000
+    link/ether fa:16:3e:bb:31:a1 brd ff:ff:ff:ff:ff:ff
+    inet 92.0.0.62/24 brd 92.0.0.255 scope global eth2
+       valid_lft forever preferred_lft forever
+[root@controller-0 ~]# ssh -i anil/id_rsa cloud-user@172.24.0.86 "sudo ip netns exec amphora-haproxy  ip a"
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1442 qdisc fq_codel state UP group default qlen 1000
+    link/ether fa:16:3e:bb:96:30 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.3.225/16 brd 10.0.255.255 scope global eth1
+       valid_lft forever preferred_lft forever
+    inet 10.0.2.226/16 brd 10.0.255.255 scope global secondary eth1:0
+       valid_lft forever preferred_lft forever
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1442 qdisc fq_codel state UP group default qlen 1000
+    link/ether fa:16:3e:e1:a8:c3 brd ff:ff:ff:ff:ff:ff
+    inet 92.0.0.161/24 brd 92.0.0.255 scope global eth2
+       valid_lft forever preferred_lft forever
+
+(overcloud) [stack@undercloud ~]$ openstack server show 15a33f7b-454c-4b8c-b88b-51223627dd8b
++-------------------------------------+----------------------------------------------------------------------------------------+
+| Field                               | Value                                                                                  |
++-------------------------------------+----------------------------------------------------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                                                                 |
+| OS-EXT-AZ:availability_zone         | nova                                                                                   |
+| OS-EXT-SRV-ATTR:host                | compute1029p-10.redhat.local                                                           |
+| OS-EXT-SRV-ATTR:hostname            | amphora-5a75bceb-3343-4bd5-9629-228930c3244a                                           |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | compute1029p-10.redhat.local                                                           |
+| OS-EXT-SRV-ATTR:instance_name       | instance-00000029                                                                      |
+| OS-EXT-SRV-ATTR:kernel_id           |                                                                                        |
+| OS-EXT-SRV-ATTR:launch_index        | 0                                                                                      |
+| OS-EXT-SRV-ATTR:ramdisk_id          |                                                                                        |
+| OS-EXT-SRV-ATTR:reservation_id      | r-44q6x3a8                                                                             |
+| OS-EXT-SRV-ATTR:root_device_name    | /dev/vda                                                                               |
+| OS-EXT-SRV-ATTR:user_data           | None                                                                                   |
+| OS-EXT-STS:power_state              | Running                                                                                |
+| OS-EXT-STS:task_state               | None                                                                                   |
+| OS-EXT-STS:vm_state                 | active                                                                                 |
+| OS-SRV-USG:launched_at              | 2021-06-08T05:08:39.000000                                                             |
+| OS-SRV-USG:terminated_at            | None                                                                                   |
+| accessIPv4                          |                                                                                        |
+| accessIPv6                          |                                                                                        |
+| addresses                           | lb-mgmt-net=172.24.3.100; n1=92.0.0.62; private=10.0.0.43                              |
+| config_drive                        | True                                                                                   |
+| created                             | 2021-06-08T05:08:07Z                                                                   |
+| description                         | amphora-5a75bceb-3343-4bd5-9629-228930c3244a                                           |
+| flavor                              | disk='3', ephemeral='0', , original_name='octavia_65', ram='1024', swap='0', vcpus='1' |
+| hostId                              | 651b69b194e86947400af594cdba381e3c598d2dee294cc7df9d5dc5                               |
+| host_status                         | UP                                                                                     |
+| id                                  | 15a33f7b-454c-4b8c-b88b-51223627dd8b                                                   |
+| image                               | octavia-amphora-16.1-20210205.1.x86_64 (8233e407-1953-45b1-8e2e-bf8828abb41a)          |
+| key_name                            | octavia-ssh-key                                                                        |
+| locked                              | False                                                                                  |
+| locked_reason                       | None                                                                                   |
+| name                                | amphora-5a75bceb-3343-4bd5-9629-228930c3244a                                           |
+| progress                            | 0                                                                                      |
+| project_id                          | a68e277bbf5f404d98beffcae3b15d9b                                                       |
+| properties                          |                                                                                        |
+| security_groups                     | name='default'                                                                         |
+|                                     | name='lb-9ea4ed8b-589d-4436-8892-fc0810a36d7a'                                         |
+|                                     | name='lb-mgmt-sec-grp'                                                                 |
+| server_groups                       | []                                                                                     |
+| status                              | ACTIVE                                                                                 |
+| tags                                | []                                                                                     |
+| trusted_image_certificates          | None                                                                                   |
+| updated                             | 2021-06-08T05:08:39Z                                                                   |
+| user_id                             | 0eb42c5c429e4dc8ad164777fa25745a                                                       |
+| volumes_attached                    |                                                                                        |
++-------------------------------------+----------------------------------------------------------------------------------------+
+(overcloud) [stack@undercloud ~]$ openstack server show 1198a3f3-9715-4f92-b86e-d24851a5d6f2
++-------------------------------------+----------------------------------------------------------------------------------------+
+| Field                               | Value                                                                                  |
++-------------------------------------+----------------------------------------------------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                                                                 |
+| OS-EXT-AZ:availability_zone         | nova                                                                                   |
+| OS-EXT-SRV-ATTR:host                | computer630-18.redhat.local                                                            |
+| OS-EXT-SRV-ATTR:hostname            | amphora-4431b9fa-467f-47af-9c24-9868ea1f69a5                                           |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | computer630-18.redhat.local                                                            |
+| OS-EXT-SRV-ATTR:instance_name       | instance-00000023                                                                      |
+| OS-EXT-SRV-ATTR:kernel_id           |                                                                                        |
+| OS-EXT-SRV-ATTR:launch_index        | 0                                                                                      |
+| OS-EXT-SRV-ATTR:ramdisk_id          |                                                                                        |
+| OS-EXT-SRV-ATTR:reservation_id      | r-g0t5cloq                                                                             |
+| OS-EXT-SRV-ATTR:root_device_name    | /dev/vda                                                                               |
+| OS-EXT-SRV-ATTR:user_data           | None                                                                                   |
+| OS-EXT-STS:power_state              | Running                                                                                |
+| OS-EXT-STS:task_state               | None                                                                                   |
+| OS-EXT-STS:vm_state                 | active                                                                                 |
+| OS-SRV-USG:launched_at              | 2021-06-08T04:54:30.000000                                                             |
+| OS-SRV-USG:terminated_at            | None                                                                                   |
+| accessIPv4                          |                                                                                        |
+| accessIPv6                          |                                                                                        |
+| addresses                           | lb-mgmt-net=172.24.0.86; n1=92.0.0.161; private=10.0.3.225                             |
+| config_drive                        | True                                                                                   |
+| created                             | 2021-06-08T04:53:33Z                                                                   |
+| description                         | amphora-4431b9fa-467f-47af-9c24-9868ea1f69a5                                           |
+| flavor                              | disk='3', ephemeral='0', , original_name='octavia_65', ram='1024', swap='0', vcpus='1' |
+| hostId                              | caf3dc59f33bb5a3ca374af0ddb86969187982cb5a95404bf3c44bf7                               |
+| host_status                         | UP                                                                                     |
+| id                                  | 1198a3f3-9715-4f92-b86e-d24851a5d6f2                                                   |
+| image                               | octavia-amphora-16.1-20210205.1.x86_64 (8233e407-1953-45b1-8e2e-bf8828abb41a)          |
+| key_name                            | octavia-ssh-key                                                                        |
+| locked                              | False                                                                                  |
+| locked_reason                       | None                                                                                   |
+| name                                | amphora-4431b9fa-467f-47af-9c24-9868ea1f69a5                                           |
+| progress                            | 0                                                                                      |
+| project_id                          | a68e277bbf5f404d98beffcae3b15d9b                                                       |
+| properties                          |                                                                                        |
+| security_groups                     | name='default'                                                                         |
+|                                     | name='lb-309fde95-fe84-42ba-9181-b50cea881620'                                         |
+|                                     | name='lb-mgmt-sec-grp'                                                                 |
+| server_groups                       | []                                                                                     |
+| status                              | ACTIVE                                                                                 |
+| tags                                | []                                                                                     |
+| trusted_image_certificates          | None                                                                                   |
+| updated                             | 2021-06-08T04:54:30Z                                                                   |
+| user_id                             | 0eb42c5c429e4dc8ad164777fa25745a                                                       |
+| volumes_attached                    |                                                                                        |
++-------------------------------------+----------------------------------------------------------------------------------------+
+
+

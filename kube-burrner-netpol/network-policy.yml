@@ -1,0 +1,144 @@
+---
+global:
+  gc: false
+  gcMetrics: false
+  measurements:
+    - name: netpolLatency
+      netpolTimeout: 10s
+      skipPodWait: true
+
+jobs:
+  - name: network-policy-proxy
+    namespace: network-policy-proxy
+    jobIterations: 1
+    qps: 20
+    burst: 20
+    namespacedIterations: true
+    podWait: false
+    waitWhenFinished: true
+    preLoadImages: false
+    preLoadPeriod: 1s
+    jobPause: 3s
+    skipIndexing: true
+    namespaceLabels:
+      security.openshift.io/scc.podSecurityLabelSync: false
+      pod-security.kubernetes.io/enforce: privileged
+      pod-security.kubernetes.io/audit: privileged
+      pod-security.kubernetes.io/warn: privileged
+    objects:
+
+      - objectTemplate: proxy-deployment.yml
+        replicas: 1
+
+      - objectTemplate: proxy-service.yml
+        replicas: 1
+
+      - objectTemplate: proxy-route.yml
+        replicas: 1
+
+  - name: network-policy-perf-pods
+    namespace: network-policy-perf
+    jobIterations: {{.NAMESPACES}}
+    qps: 20
+    burst: 20
+    namespacedIterations: true
+    podWait: false
+    waitWhenFinished: true
+    preLoadImages: false
+    preLoadPeriod: 1s
+    jobPause: 1m
+    skipIndexing: true
+    {{- if .JOB_NAMESPACE_LABELS }}
+    namespaceLabels: {{.JOB_NAMESPACE_LABELS}}
+    {{- end }}
+    objects:
+      - objectTemplate: pod.yml
+        replicas: {{.PODS_PER_NAMESPACE}}
+        inputVars:
+          namespaces: {{.NAMESPACES}}
+          netpols_per_namespace: {{.NETPOLS_PER_NAMESPACE}}
+          pod_selectors: {{.POD_SELECTORS}}
+          peer_namespaces: {{.PEER_NAMESPACES}}
+
+      - objectTemplate: np-deny-all.yml
+        replicas: 1
+
+      - objectTemplate: np-allow-from-proxy.yml
+        replicas: 1
+
+  {{- if .CONVERGENCE_TRACKER }}
+  - name: convergence-tracker
+    namespace: convergence-tracker
+    jobIterations: 1
+    podWait: false
+    waitWhenFinished: false
+    jobPause: 1m
+    preLoadImages: false
+    churn: false
+    cleanup: true
+    {{- if .JOB_NAMESPACE_LABELS }}
+    namespaceLabels: {{.JOB_NAMESPACE_LABELS}}
+    {{- end}}
+    objects:
+      - objectTemplate: {{.PLATFORM}}/convergence_tracker.yml
+        replicas: {{.NODES_COUNT}}
+        inputVars:
+          convergence_period: "{{.CONVERGENCE_PERIOD}}"
+          convergence_timeout: "{{.CONVERGENCE_TIMEOUT}}"
+          es_server: "{{.ES_SERVER}}"
+          es_index: {{.ES_INDEX}}
+          metadata: "netpols_per_namespace: {{.NETPOLS_PER_NAMESPACE}}, pods_per_namespace: {{.PODS_PER_NAMESPACE}},
+           local_pods: {{.LOCAL_PODS}}, pod_selectors: {{.POD_SELECTORS}}, 
+           single_ports: {{.SINGLE_PORTS}}, port_ranges: {{.PORT_RANGES}},
+           peer_namespaces: {{.PEER_NAMESPACES}}, peer_pods: {{.PEER_PODS}}, cidr_rules: {{.CIDRS}}"
+  {{- end }}
+
+  - name: network-policy-perf
+    namespace: network-policy-perf
+    jobIterations: {{.NAMESPACES}}
+    qps: 20
+    burst: 20
+    namespacedIterations: true
+    podWait: false
+    waitWhenFinished: true
+    preLoadImages: false
+    preLoadPeriod: 15s
+    jobPause: 1m
+    {{- if .CONVERGENCE_TRACKER }}
+    beforeCleanup: "convergence_waiter.sh"
+    {{- end }}
+    cleanup: false
+    {{- if .JOB_NAMESPACE_LABELS }}
+    namespaceLabels: {{.JOB_NAMESPACE_LABELS}}
+    {{- end }}
+    objects:
+      {{- if eq .INGRESS "true" }}
+      - objectTemplate: ingress-np.yml
+        replicas: {{.NETPOLS_PER_NAMESPACE}}
+        inputVars:
+          namespaces: {{.NAMESPACES}}
+          pods_per_namespace: {{.PODS_PER_NAMESPACE}}
+          netpols_per_namespace: {{.NETPOLS_PER_NAMESPACE}}
+          local_pods: {{.LOCAL_PODS}}
+          pod_selectors: {{.POD_SELECTORS}}
+          single_ports: {{.SINGLE_PORTS}}
+          port_ranges: {{.PORT_RANGES}}
+          peer_namespaces: {{.PEER_NAMESPACES}}
+          peer_pods: {{.PEER_PODS}}
+          cidr_rules: {{.CIDRS}}
+      {{- end }}
+      {{- if eq .EGRESS "true" }}
+      - objectTemplate: egress-np.yml
+        replicas: {{.NETPOLS_PER_NAMESPACE}}
+        inputVars:
+          namespaces: {{.NAMESPACES}}
+          pods_per_namespace: {{.PODS_PER_NAMESPACE}}
+          netpols_per_namespace: {{.NETPOLS_PER_NAMESPACE}}
+          local_pods: {{.LOCAL_PODS}}
+          pod_selectors: {{.POD_SELECTORS}}
+          single_ports: {{.SINGLE_PORTS}}
+          port_ranges: {{.PORT_RANGES}}
+          peer_namespaces: {{.PEER_NAMESPACES}}
+          peer_pods: {{.PEER_PODS}}
+          cidr_rules: {{.CIDRS}}
+      {{- end }}

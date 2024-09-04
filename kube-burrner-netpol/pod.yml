@@ -1,0 +1,64 @@
+{{- $myDict := dict "test-pod" "true" "num" (toString .Replica) }}
+{{- $replicas := int .Replica }}
+{{- $maxPodIdx := mul (sub .netpols_per_namespace 1) .pod_selectors .peer_namespaces}}
+{{- $maxPodIdx = add (div $maxPodIdx .namespaces) 1}}
+{{- $podIdx := mod .Replica $maxPodIdx}}
+{{- if ge .Replica 2}}
+  {{- $podIdx = add $podIdx 1}}
+{{- end }}
+{{- $_ := set $myDict (toString $podIdx) "true" }}
+{{- $labels := toJson $myDict }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod-{{.Replica}}
+  labels: {{$labels}}
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                test-pod: "true"
+            namespaceSelector: {}
+            topologyKey: kubernetes.io/hostname
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                num: "{{.Replica}}"
+            namespaceSelector: {}
+            topologyKey: kubernetes.io/hostname
+#    nodeAffinity:
+#      requiredDuringSchedulingIgnoredDuringExecution:
+#        nodeSelectorTerms:
+#          - matchExpressions:
+#              - key: node-role.kubernetes.io/control-plane
+#                operator: DoesNotExist
+  containers:
+  - name: webserver
+    image: quay.io/cloud-bulldozer/sampleapp:latest
+    resources:
+      requests:
+        memory: "10Mi"
+        cpu: "10m"
+    imagePullPolicy: Always
+    ports:
+     - containerPort: 8080
+       protocol: TCP
+    securityContext:
+       privileged: false
+  - name: curlapp 
+    image: quay.io/vkommadi/netpolvalidator:latest
+    resources:
+      requests:
+        memory: "10Mi"
+        cpu: "10m"
+    imagePullPolicy: Always
+    ports:
+     - containerPort: 9001
+       protocol: TCP
+    securityContext:
+       privileged: false

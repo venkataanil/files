@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: proxyserver
+spec:
+  template:
+    metadata:
+      labels:
+        name: proxyserver
+        app: proxyserver
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1 
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway 
+        labelSelector: 
+          matchLabels:
+            app: proxyserver 
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: node-role.kubernetes.io/infra
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/workload
+                operator: DoesNotExist
+      containers:
+      - name: proxyserver 
+        image: quay.io/vkommadi/netpolproxy:latest
+        resources:
+          requests:
+            memory: "10Mi"
+            cpu: "10m"
+        ports:
+        - containerPort: 9002
+          protocol: TCP
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: false
+      restartPolicy: Always
+  replicas: 1
+  selector:
+    matchLabels:
+      name: proxyserver
+  strategy:
+    type: RollingUpdate

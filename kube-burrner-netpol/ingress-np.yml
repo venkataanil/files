@@ -1,0 +1,79 @@
+{{- $podNum := add .pods_per_namespace 1 }}
+{{- $podNum = sub $podNum .peer_pods }}
+{{- $localPodDict := dict (toString 1) "true"}}
+{{- $localPodLabel := toJson $localPodDict }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress-{{.Iteration}}-{{.Replica}}
+spec:
+  podSelector:
+    matchLabels: {{$localPodLabel}}
+  ingress:
+  {{- $startIdx := add (mul $.Iteration .pod_selectors .netpols_per_namespace .peer_namespaces) (mul (sub $.Replica 1) .pod_selectors .peer_namespaces)}}
+  {{- $podIdx := mul (sub $.Replica 1) .pod_selectors .peer_namespaces}}
+  {{- $podIdx = add (div $podIdx $.namespaces) 1}}
+  {{- $podDict := dict (toString $podIdx) "true"}}
+  {{- $podLabel := toJson $podDict }}
+  {{- if ge $startIdx $.namespaces }}
+    {{- $startIdx = mod $startIdx $.namespaces }}
+  {{- end }}
+  {{- range $ps, $e := until .pod_selectors }}
+    {{- $mystart := add $startIdx (mul $ps $.peer_namespaces) }}
+    {{- $nsList := list }}
+    {{- range $i, $v := until $.peer_namespaces }}
+      {{- $nextNs := add $mystart $i }}
+      {{- $next_namespace := print "network-policy-perf-" $nextNs }}
+      {{- $nsList = append $nsList $next_namespace }}
+    {{- end }}
+    {{- $nsNames := toJson $nsList }}
+  - from:
+    - podSelector:
+        matchLabels: {{$podLabel}}
+      namespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values: {{$nsNames}}
+    ports:
+    {{- $single_port := 8079 }}
+    {{- range $i, $e := until $.single_ports }}
+      {{- $single_port = add $single_port 1 }}
+      - protocol: TCP
+        port: {{$single_port}}
+    {{- end }}
+    {{- $rangeStart := 5000 }}
+    {{- range $i, $e := until $.port_ranges }}
+      {{- $rangeEnd := add $rangeStart 5 }}
+      - protocol: TCP
+        port: {{$rangeStart}}
+        endPort: {{$rangeEnd}}
+      {{ $rangeStart = add $rangeStart 10}}
+    {{- end }}
+  {{- end }}
+  {{- if gt .cidr_rules 0 }}
+    {{- $subnetIdx := add (mul $.Replica $.cidr_rules) 1 }}
+    {{- range $i, $e := until .cidr_rules }}
+  - from:
+    - ipBlock:
+        cidr: {{GetSubnet24 (int $subnetIdx) }}
+    ports:
+      {{- $single_port := 1000 }}
+      {{- range $i, $e := until $.single_ports }}
+        {{- $single_port = add $single_port 1 }}
+      - protocol: TCP
+        port: {{$single_port}}
+      {{- end }}
+      {{- $rangeStart := 5000 }}
+      {{- range $i, $e := until $.port_ranges }}
+        {{- $rangeEnd := add $rangeStart 5 }}
+      - protocol: TCP
+        port: {{$rangeStart}}
+        endPort: {{$rangeEnd}}
+        {{ $rangeStart = add $rangeStart 10}}
+      {{- end }}
+    {{- $subnetIdx = add $subnetIdx 1 }}
+    {{- end }}
+  {{- end }}
+  policyTypes:
+    - Ingress

@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxyserver
+spec:
+  selector:
+    name: proxyserver
+  ports:
+  - protocol: TCP
+    port: 9002
+    targetPort: 9002
+  type: ClusterIP

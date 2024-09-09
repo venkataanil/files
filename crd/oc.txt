@@ -1,0 +1,4 @@
+# To restore certificates and fix " remote error: tls: internal error" errors when nodes are restarted.
+oc get csr -o name | xargs oc adm certificate approve
+oc get csr -o name | grep Pending | xargs oc adm certificate approve
+oc get csr --no-headers | awk '$2 == "Pending" {print $1}' | xargs -I {} oc adm certificate approve {}

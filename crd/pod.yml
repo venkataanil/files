@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+  namespace: default
+  labels:
+    app: test
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: f36-h09-000-r640
+  containers:
+  - args:
+    - sleep
+    - infinity
+    name: app
+    image: quay.io/centos/centos
+    imagePullPolicy: IfNotPresent

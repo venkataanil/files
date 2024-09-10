@@ -2,3 +2,4 @@
 oc get csr -o name | xargs oc adm certificate approve
 oc get csr -o name | grep Pending | xargs oc adm certificate approve
 oc get csr --no-headers | awk '$2 == "Pending" {print $1}' | xargs -I {} oc adm certificate approve {}
+oc adm cordon <node name>

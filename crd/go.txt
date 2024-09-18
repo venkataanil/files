@@ -1,0 +1,5 @@
+curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
+gvm listall
+gvm install go1.22.0
+gvm use go1.22.0 --default
+gvm list

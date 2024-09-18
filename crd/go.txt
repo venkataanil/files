@@ -3,3 +3,11 @@ gvm listall
 gvm install go1.22.0
 gvm use go1.22.0 --default
 gvm list
+
+module github.com/pselle/foo
+
+replace github.com/kube-burner/kube-burner => /root/np/checkin/git/kube-burner
+
+require (
+	github.com/kube-burner/kube-burner v1.10.6
+)

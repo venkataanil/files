@@ -184,11 +184,17 @@
   captureStart: true
 
 # OVS metrics
-- query: (sum(irate(container_cpu_usage_seconds_total{id=~"/system.slice/ovs-vswitchd.service"}[2m]) * 100) by (node)) > 0
+- query: (sum(irate(container_cpu_usage_seconds_total{id=~"/system.slice/ovs-vswitchd.service"}[2m]) * 100) by (node) and on (node) kube_node_role{role="worker"}) > 0
   metricName: ovsVswitchdCPU
 
-- query: (sum(irate(container_cpu_usage_seconds_total{id=~"/system.slice/ovsdb-server.service"}[2m]) * 100) by (node)) > 0
+- query: (sum(container_memory_rss{id=~"/system.slice/ovs-vswitchd.service"}) by (node) and on (node) kube_node_role{role="worker"}) > 0
+  metricName: ovsVswitchdMemory
+
+- query: (sum(irate(container_cpu_usage_seconds_total{id=~"/system.slice/ovsdb-server.service"}[2m]) * 100) by (node) and on (node) kube_node_role{role="worker"}) > 0
   metricName: ovsdbServerCPU
+
+- query: (sum(container_memory_rss{id=~"/system.slice/ovsdb-server.service"}) by (node) and on (node) kube_node_role{role="worker"}) > 0
+  metricName: ovsdbServerMemory
 
 - query: ovs_vswitchd_bridge_flows_total
   metricName: ovsFlowsCounter

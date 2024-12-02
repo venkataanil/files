@@ -1,0 +1,155 @@
+# https://docs.openshift.com/container-platform/4.17/networking/networking_operators/metallb-operator/metallb-operator-install.html
+$ cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: metallb-system
+EOF
+
+$ cat << EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: metallb-operator
+  namespace: metallb-system
+EOF
+
+$ oc get operatorgroup -n metallb-system
+
+# Note: Don't use Subscription object proided in the blog https://www.redhat.com/en/blog/metallb-in-bgp-mode
+# Note: Instead use it from product doc https://docs.openshift.com/container-platform/4.17/networking/networking_operators/metallb-operator/metallb-operator-install.html
+
+$ cat metallb-sub.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: metallb-operator-sub
+  namespace: metallb-system
+spec:
+  channel: stable
+  name: metallb-operator
+  source: redhat-operators 
+  sourceNamespace: openshift-marketplace
+
+$ oc create -f metallb-sub.yaml
+
+$ oc label ns metallb-system "openshift.io/cluster-monitoring=true"
+$ watch -n5 "oc get installplan -n metallb-system"
+
+# Note: you may see status as "Failed". In that case delete and create again
+$ oc get csv -n metallb-system -o custom-columns='NAME:.metadata.name, VERSION:.spec.version, PHASE:.status.phase'
+NAME                                     VERSION               PHASE
+metallb-operator.v4.16.0-202411190033   4.16.0-202411190033   Failed
+
+$ oc delete ns metallb-system
+$ create ns, OperatorGroup, metallb-sub.yaml
+
+$ watch "oc get installplan -n metallb-system"
+$ oc get csv -n metallb-system -o custom-columns='NAME:.metadata.name, VERSION:.spec.version, PHASE:.status.phase'
+NAME                                     VERSION               PHASE
+metallb-operator.v4.16.0-202411190033   4.16.0-202411190033   Succeeded
+
+$ cat << _EOF_ | oc apply -f -
+---
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  nodeSelector:
+        node-role.kubernetes.io/worker: ""
+_EOF_
+
+# Note: follow officail doc for IPAddressPool and BGPPeer instead of blog. Looks like BGPAdvertisement CRD is introduced recently. So follow doc instead of blog.
+# https://docs.openshift.com/container-platform/4.17/networking/metallb/metallb-configure-address-pools.html#nw-metallb-configure-address-pool_configure-metallb-address-pools
+$ cat << _EOF_ | oc apply -f -
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: address-pool-bgp
+spec:
+  addresses:
+  - 198.18.10.109-198.18.10.113
+_EOF_
+
+# https://docs.openshift.com/container-platform/4.17/networking/metallb/metallb-configure-bgp-peers.html#metallb-configure-bgp-peers
+$ cat << _EOF_ | oc apply -f -
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  name: peer-test
+  namespace: metallb-system
+spec:  
+  myASN: 64520
+  peerASN: 64521
+  peerAddress: 198.18.10.1
+_EOF_
+
+$ cat << _EOF_ | oc apply -f -
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: bgpadvertisement-1
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - address-pool-bgp
+  peers:
+    - peer-test
+  aggregationLength: 32
+  aggregationLengthV6: 128
+  localPref: 100
+_EOF_
+
+$ oc new-project test-metallb
+
+$ oc create deployment hello-node --image=k8s.gcr.io/e2e-test-images/agnhost:2.33 -- /agnhost serve-hostname
+
+$ cat  << __EOF__ | oc apply -f -
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-frr
+spec:
+  selector:
+        app: hello-node
+  ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 9376
+  type: LoadBalancer
+__EOF__
+
+$ oc describe svc test-frr
+Name:                     test-frr
+Namespace:                test-metallb
+Labels:                   <none>
+Annotations:              metallb.universe.tf/ip-allocated-from-pool: address-pool-bgp
+Selector:                 app=hello-node
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       172.30.168.239
+IPs:                      172.30.168.239
+LoadBalancer Ingress:     198.18.10.109
+Port:                     <unset>  80/TCP
+TargetPort:               9376/TCP
+NodePort:                 <unset>  32019/TCP
+Endpoints:                10.130.0.33:9376
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason        Age   From                Message
+  ----    ------        ----  ----                -------
+  Normal  IPAllocated   14s   metallb-controller  Assigned IP ["198.18.10.109"]
+  Normal  nodeAssigned  14s   metallb-speaker     announcing from node "d27-h23-000-r650" with protocol "bgp"
+  Normal  nodeAssigned  14s   metallb-speaker     announcing from node "d26-h15-000-r650" with protocol "bgp"
+  
+$ curl -l 198.18.10.109
+hello-node-7669d97457-7mt5c

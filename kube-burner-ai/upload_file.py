@@ -6,6 +6,7 @@ import uuid
 import os
 
 s3bucket = "kube-burner-ai-s3-bucket"
+CHUNK_SIZE=10
 
 def split_dict_into_chunks(d, chunk_size):
     it = iter(d.items())
@@ -31,8 +32,8 @@ def upload_csv_to_s3(data, bucket, filename):
     tmp = tempfile.NamedTemporaryFile(mode='w+', newline='', delete=False)
     try:
         writer = csv.writer(tmp)
-        writer.writerow(["Key", "Value"])
-        for chunk in split_dict_into_chunks(large_dict, 10):
+        writer.writerow(["Metric", "Value"])
+        for chunk in split_dict_into_chunks(data, CHUNK_SIZE):
             for k, v in chunk.items():
                 writer.writerow([k, v])
         tmp.flush()
